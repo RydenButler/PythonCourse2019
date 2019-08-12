@@ -51,14 +51,14 @@ with open('test_writefile.txt', 'a') as f:
 import csv
 
 ## Open a file stream and create a CSV writer object
-with open('test_writecsv.csv', 'wb') as f:
+with open('test_writecsv.csv', 'w') as f:
   my_writer = csv.writer(f)
   for i in range(1, 100):
     my_writer.writerow([i, i-1])
 
 
 ## Now read in the csv
-with open('test_writecsv.csv', 'rb') as f:
+with open('test_writecsv.csv', 'r') as f:
   my_reader = csv.reader(f)
   mydat = []
   for row in my_reader:
@@ -92,14 +92,15 @@ with open('test_csvfields.csv', 'r') as f:
 ## pip3 install beautifulsoup4
 
 from bs4 import BeautifulSoup
-import urllib2 
+import urllib.request
 import random
 import time
 import os
 
 ## Open a web page
 web_address = 'https://polisci.wustl.edu/people/88/'
-web_page = urllib2.urlopen(web_address)
+web_page = urllib.request.urlopen(web_address)
+web_page
 
 ## Parse it
 soup = BeautifulSoup(web_page.read())
@@ -116,11 +117,15 @@ fields = soup.find_all('h3') ## list of html entries
 
 # Get the attributes
 all_a_tags = soup.find_all('a')
+all_a_tags
+
 all_a_tags[57]
 all_a_tags[57].attrs ## a dictionary with the attributes
 l = {"class" : [], "href" : []}
 for p in [57,58]:
   l["class"].append(all_a_tags[p].attrs["class"])
+
+print(l)
 
 all_a_tags[57].attrs.keys()
 all_a_tags[57]['href']
@@ -128,7 +133,7 @@ all_a_tags[57]['class']
 
 
 ## Use this info about HTML elements to grab them
-soup.find_all('a', {'class' : "person-view-primary-field"})
+soup.find_all('a', {'class' : "card"})
 
 ## There may be tags within tags
 sections = soup.find_all('div')
@@ -141,7 +146,7 @@ sections[2].find_all('a') ## ALL 'a' tags within the 'div' tag
 all_fields = soup.find_all('div')
 randy = all_fields[31]
 
-randy.find_all("a")
+randy.find_all("h3")
 
 randy.contents ## Gives a list of all children
 randy.children ## Creates an iterator for children
@@ -201,6 +206,22 @@ def start_chrome(webpage):
     driver.get(webpage)
     return driver
 
+## Interactive example:
+
+# start the web drivers
+driver = start_chrome('https://www.facebook.com')
+# find the username element and enter text
+username = driver.find_element_by_name('email')
+username.send_keys('r.butler@wustl.edu')
+# find the password field and enter text
+password = driver.find_element_by_name('pass')
+password.send_keys('ImNotActuallyShowingYouMyPassword')
+# find login button and click
+login = driver.find_element_by_id("loginbutton")
+login.click()
+
+
+## Functionalized example (courtesy of Erin Rossiter):
 def define_search(driver):
     ## search element changed id randomly, class was the only other info
     ## but 2 elements in this class... we want the 2nd.
