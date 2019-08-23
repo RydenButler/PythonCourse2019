@@ -19,7 +19,7 @@ Material for 2019 WashU summer course "Introduction to Python."
 | Day07 | Mon. 8/19 | SQL |  
 | Day08 | Tue. 8/20| Sorting & Recursion |HW4 assigned (due Mon. 8/26)      |
 | Day09 | Fri. 8/23 | Advanced Data Structures | HW5 assigned (due Wed. 8/28) |
-|Poster session | 9/09 12:00 - 1:00 pm | | |
+|Poster session | 9/11 12:00 - 1:00 pm | | |
 
 
 

@@ -8,10 +8,6 @@ def makeLink(G, node1, node2):
   (G[node2])[node1] = True
   return G 
 
-graph = {}
-graph = makeLink(graph, "a", "b")
-
-
 ## empty graph 
 ring = {} 
 
@@ -21,25 +17,42 @@ n = 5
 ## Add in edges with makeLink function
 for i in range(n):
   ring = makeLink(ring, i, (i+1)%n)
-  print(ring)
+  print ring
 
-print(ring)
+print ring
 
 ## How many nodes?
-print(len(ring))
+print len(ring)
 
 ## How many edges?
-print(sum([len(ring[node]) for node in ring.keys()])/2)
+print sum([len(ring[node]) for node in ring.keys()])/2 
 
 
 ## Grid Network
 ## TODO: create a square graph with 256 nodes using the makeLink function
 ## TODO: define a function countEdges
 
+import math
+n = 16
+g = {}
+for i in range(1,n):
+  n_width = int(math.sqrt(n))
+  ## if we are not on a boundary
+  ## i.e., if node is not multiple of our set node width
+  ## then link to next node
+  if i%n_width != 0:
+    makeLink(g, i, i+1)
+  ## if not on last row
+  ## link to node directly below
+  if i <= n-n_width:
+    makeLink(g, i, i+n_width)
 
 
-
-
+def count_edges(graph):
+  ## apply len function to each element of graph (how many connections)
+  ## sum up all connections
+  ## divide by 2 since each counted twice in graph (1->2 and 2<-1)
+  return sum(map(len, graph.values()))/2
 
 
 
@@ -83,7 +96,7 @@ def findPath(graph, start, end, path=[]):
     ## base case, reached end
     if start == end:
         return path
-    if not start in graph.keys():
+    if not graph.has_key(start):
         return None
     ## for each connection to starting node
     for node in graph[start]:
@@ -95,7 +108,7 @@ def findPath(graph, start, end, path=[]):
     return findPath(graph, node, end, path)
 
 
-print(findPath(movies, jr, ms))
+print findPath(movies, jr, ms)
 
 ## start with julia roberts 
 ## who is she directly connected to?
@@ -117,16 +130,33 @@ movies[kb].keys() ## found meryl streep!
 ## for path in allPaths:
 ##   print path
 
+def findAllPaths(graph, start, end, path=[]):
+        path = path + [start]
+        if start == end:
+            return [path]
+        if not graph.has_key(start):
+            return None
+        allpaths = []
+        for node in graph[start]:
+            if node not in path:
+                allpaths.extend(findAllPaths(graph, node, end, path))
+        allpaths = filter(None, allpaths)
+        return allpaths
 
+allpaths = findAllPaths(movies, jr, ms)
 
-
+for path in allpaths:
+  print path
 
 
 ## TODO: implement findShortestPath() to print shorest path between actors
 ## print findShortestPath(movies, ms, ss)
 
+def findShortestPath(graph, start, end):
+    allpaths = findAllPaths(graph, start, end)
+    return min(allpaths, key = len)
 
-
+shortest = findShortestPath(movies, jr, ms)
 
 
 
